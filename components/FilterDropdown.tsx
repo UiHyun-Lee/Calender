@@ -93,7 +93,7 @@ export default function FilterDropdown({
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <button className="px-4 py-2 bg-gradient-to-r from-[#a259df] to-[#38b6ff] text-white rounded-lg shadow hover:opacity-90 transition">
+                <button className="btn-main">
                     Filter Optionen
                 </button>
             </PopoverTrigger>
