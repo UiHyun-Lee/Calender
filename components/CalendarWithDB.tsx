@@ -15,19 +15,12 @@ import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import EditEventModal from "./EditEventModal";
 import EditEventListModal from "./EditEventListModal";
-import { toast } from "sonner"; // 알림
+import { toast } from "sonner";
 
 const EventModal = dynamic(() => import("./EventModal"), { ssr: false });
 
-// 날짜 계산 유틸
 const getISODate = (d: Date) =>
     `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-const today = new Date();
-const todayISO = getISODate(today);
-const weekStartISO = (() => { const d = new Date(); const day = d.getDay(); const mondayOffset = day === 0 ? -6 : 1 - day; d.setDate(d.getDate() + mondayOffset); return getISODate(d); })();
-const weekEndISO = (() => { const [y, m, dd] = weekStartISO.split("-").map(Number); const d = new Date(y, m - 1, dd); d.setDate(d.getDate() + 4); return getISODate(d); })();
-const monthStartISO = (() => { const d = new Date(); d.setDate(1); return getISODate(d); })();
-const monthEndISO = (() => { const d = new Date(); const nm = new Date(d.getFullYear(), d.getMonth() + 1, 1); nm.setDate(nm.getDate() - 1); return getISODate(nm); })();
 
 export default function CalendarWithDB() {
     const calendarRef = useRef<FullCalendarClass | null>(null);
@@ -38,6 +31,42 @@ export default function CalendarWithDB() {
     const [eventList, setEventList] = useState<any[]>([]);
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [editModalOpen, setEditModalOpen] = useState(false);
+
+    // 날짜 변수들을 state로!
+    const [weekStartISO, setWeekStartISO] = useState("");
+    const [weekEndISO, setWeekEndISO] = useState("");
+    const [monthStartISO, setMonthStartISO] = useState("");
+    const [monthEndISO, setMonthEndISO] = useState("");
+
+    // 날짜 변수들은 클라이언트에서만 계산
+    useEffect(() => {
+        const now = new Date();
+
+        // 주 시작 (월요일)
+        const d = new Date(now);
+        const day = d.getDay();
+        const mondayOffset = day === 0 ? -6 : 1 - day;
+        d.setDate(d.getDate() + mondayOffset);
+        const weekStart = getISODate(d);
+
+        // 주 끝 (금요일)
+        const dEnd = new Date(d);
+        dEnd.setDate(d.getDate() + 4);
+        const weekEnd = getISODate(dEnd);
+
+        // 월 시작
+        const mStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        const mStartStr = getISODate(mStart);
+
+        // 월 끝
+        const mEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        const mEndStr = getISODate(mEnd);
+
+        setWeekStartISO(weekStart);
+        setWeekEndISO(weekEnd);
+        setMonthStartISO(mStartStr);
+        setMonthEndISO(mEndStr);
+    }, []);
 
     useEffect(() => {
         supabase
@@ -59,7 +88,9 @@ export default function CalendarWithDB() {
         if (!error) setEventList(data || []);
     };
 
-    useEffect(() => { if (editListOpen) fetchEvents(); }, [editListOpen]);
+    useEffect(() => {
+        if (editListOpen) fetchEvents();
+    }, [editListOpen]);
 
     // 수정/삭제 핸들러
     const handleEditClick = (evt: any) => {
@@ -68,7 +99,7 @@ export default function CalendarWithDB() {
     };
 
     const handleDeleteClick = async (evt: any) => {
-        if (!confirm("정말로 삭제하시겠습니까?")) return;
+        if (!confirm("Möchten Sie das wirklich löschen?")) return;
         try {
             const res = await fetch(`/api/appointments/${evt.id}`, { method: "DELETE" });
             if (!res.ok) throw new Error();
@@ -100,27 +131,35 @@ export default function CalendarWithDB() {
     };
 
     // 필터 변경
-    const handleFilterChangeAction = useCallback((f: Filter) => {
-        setFilter(f);
-        const api = calendarRef.current?.getApi();
-        if (f.start && f.end) {
-            if (f.start === f.end) {
-                api?.changeView("timeGridDay", f.start);
-            } else if (f.start === weekStartISO && f.end === weekEndISO) {
-                api?.changeView("timeGridWeek", f.start);
-            } else if (f.start === monthStartISO && f.end === monthEndISO) {
-                api?.changeView("dayGridMonth", f.start);
+    const handleFilterChangeAction = useCallback(
+        (f: Filter) => {
+            setFilter(f);
+            const api = calendarRef.current?.getApi();
+            if (!weekStartISO || !weekEndISO || !monthStartISO || !monthEndISO) return;
+
+            if (f.start && f.end) {
+                if (f.start === f.end) {
+                    api?.changeView("timeGridDay", f.start);
+                } else if (f.start === weekStartISO && f.end === weekEndISO) {
+                    api?.changeView("timeGridWeek", f.start);
+                } else if (f.start === monthStartISO && f.end === monthEndISO) {
+                    api?.changeView("dayGridMonth", f.start);
+                } else {
+                    api?.changeView("dayGridMonth");
+                }
             } else {
                 api?.changeView("dayGridMonth");
             }
-        } else {
-            api?.changeView("dayGridMonth");
-        }
-        api?.refetchEvents();
-    }, []);
+            api?.refetchEvents();
+        },
+        [weekStartISO, weekEndISO, monthStartISO, monthEndISO]
+    );
+
+    // 날짜 정보가 아직 준비 안 됐으면 렌더X (SSR mismatch 방지)
+    if (!weekStartISO || !weekEndISO || !monthStartISO || !monthEndISO) return null;
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-[#162841] to-[#233858] pb-8">
+        <div className="min-h-screen bg-gradient-to-b from-[var(--bg-main)] to-[#233858] pb-8">
             {/* 상단 버튼 */}
             <div className="flex justify-end items-center gap-4 px-8 py-6">
                 <FilterDropdown
@@ -130,13 +169,13 @@ export default function CalendarWithDB() {
                 />
                 <button
                     onClick={() => setModalOpen(true)}
-                    className="bg-gradient-to-r from-[#a259df] to-[#38b6ff] px-6 py-2 rounded-full font-bold text-white shadow-xl hover:scale-105 hover:opacity-90 transition"
+                    className="btn-main"
                 >
                     + Neuer Termin
                 </button>
                 <button
                     onClick={() => setEditListOpen(true)}
-                    className="bg-gradient-to-r from-pink-400 to-red-500 px-6 py-2 rounded-full font-bold text-white shadow-xl hover:scale-105 hover:opacity-90 transition"
+                    className="btn-main btn-danger"
                 >
                     Termin bearbeiten
                 </button>
@@ -188,9 +227,10 @@ export default function CalendarWithDB() {
             />
 
             {/* FullCalendar */}
-            <div className="rounded-2xl bg-[#233858] shadow-2xl mx-4 md:mx-20 my-6 border border-[#263754] overflow-hidden">
+            <div className="card mx-4 md:mx-20 my-6 overflow-hidden">
                 <FullCalendar
                     ref={calendarRef}
+                    themeSystem="Litera"
                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
                     initialView="dayGridMonth"
                     dayMaxEvents={2}
@@ -241,12 +281,12 @@ export default function CalendarWithDB() {
                                 placement: "top",
                                 delay: [100, 50],
                                 content: `
-                                <div style="font-size:14px;line-height:1.4">
-                                  <strong>${firstname} ${lastname}</strong><br/>
-                                  <em>${startStr}${endStr ? " – " + endStr : ""}</em><br/>
-                                  ${notes || ""}
-                                </div>
-                              `,
+                  <div style="font-size:14px;line-height:1.4">
+                    <strong>${firstname} ${lastname}</strong><br/>
+                    <em>${startStr}${endStr ? " – " + endStr : ""}</em><br/>
+                    ${notes || ""}
+                  </div>
+                `,
                             });
                             instance.show();
                         } else {

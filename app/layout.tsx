@@ -1,12 +1,9 @@
-// app/layout.tsx
 import React from 'react';
-import { Inter } from 'next/font/google';
-import CalendarWithDB from '../../calendar/components/CalendarWithDB';
+import CalendarWithDB from '../components/CalendarWithDB';
 import { Toaster } from "sonner";
-import '../../vocare/styles/globals.css';
+import '../styles/globals.css';
 
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (

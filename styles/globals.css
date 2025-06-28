@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 밝은 모드 변수 */
+  --bg-main: #f8fafc;
+  --bg-panel: #fff;
+  --text-main: #22223b;
+  --text-light: #7c7c98;
+  --accent: #a259df;
+  --accent2: #38b6ff;
+  --border: #ececec;
+  --danger: #e74c3c;
+}
+
+.dark {
+  --bg-main: #162841;
+  --bg-panel: #222b46;
+  --text-main: #e6e8ef;
+  --text-light: #8492ad;
+  --accent: #a259df;
+  --accent2: #38b6ff;
+  --border: #263754;
+  --danger: #ff6b81;
+}
+
+body {
+  @apply bg-[var(--bg-main)] text-[var(--text-main)] min-h-screen;
+  font-family: 'Inter', 'Pretendard', 'Segoe UI', 'system-ui', sans-serif;
+  transition: background 0.25s, color 0.2s;
+}
+
+/* 카드 및 패널 */
+.card,
+.bg-panel {
+  background: var(--bg-panel);
+  border-radius: 1rem;
+  box-shadow: 0 2px 20px #0002;
+  border: 1px solid var(--border);
+}
+
+/* 공통 버튼 스타일 */
+.btn-main {
+  @apply px-5 py-2 rounded-full font-bold transition bg-gradient-to-r;
+  background-image: linear-gradient(90deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  box-shadow: 0 1px 8px #0002;
+}
+.btn-main:hover, .btn-main:focus {
+  filter: brightness(1.07);
+  box-shadow: 0 3px 16px var(--accent2)30, 0 1px 8px #0002;
+}
+
+/* 삭제 버튼 */
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+.btn-danger:hover, .btn-danger:focus {
+  background: #e54c6e;
+}
+
+/* 입력창, 셀렉트 등 */
+input, select, textarea {
+  background: #111827;
+  color: #e6e8ef;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  transition: border 0.18s, background 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--accent);
+  border-color: var(--accent);
+}
+
+/* 모달 효과 */
+.modal-bg {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50;
+  backdrop-filter: blur(2px);
+}
+.modal-panel {
+  @apply p-7 rounded-2xl shadow-2xl w-[360px] card;
+  animation: modalUp 0.2s cubic-bezier(.77,0,.18,1);
+}
+@keyframes modalUp {
+  from { transform: translateY(30px) scale(0.96); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* 캘린더 커스텀 (FullCalendar) */
+.fc {
+  --fc-bg-color: transparent;
+  --fc-page-bg-color: transparent;
+  --fc-border-color: var(--border);
+  --fc-event-bg-color: var(--accent);
+  --fc-event-border-color: var(--accent2);
+  --fc-event-text-color: #fff;
+  --fc-today-bg-color: #233858cc;
+}
+
+.fc .fc-header-toolbar {
+  background: rgba(34, 43, 70, 0.95);
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 24px #12162748;
+  margin-bottom: 1.2rem;
+  padding: 1.2rem 2rem 1rem 2rem;
+}
+
+/* FullCalendar 버튼 */
+.fc .fc-button {
+  background: transparent !important;
+  color: var(--accent) !important;
+  border: 2px solid;
+  border-image: linear-gradient(90deg, var(--accent), var(--accent2)) 1;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  padding: 6px 19px !important;
+  margin: 0 4px;
+  box-shadow: none !important;
+  transition: background 0.18s, color 0.16s, border 0.16s, box-shadow 0.18s;
+}
+.fc .fc-button:hover,
+.fc .fc-button:focus,
+.fc .fc-button.fc-button-active {
+  background: linear-gradient(90deg, var(--accent), var(--accent2)) !important;
+  color: #fff !important;
+  border: 2px solid transparent !important;
+}
+
+/* 스크롤바 */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #233858;
+}
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 6px;
+}
+
+/* 기타 미세 튜닝 */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+
+
+
+
+

@@ -49,13 +49,13 @@ export default function EditEventListModal({
                                         onClick={() => onEdit(evt)}
                                         className="px-3 py-1 bg-gradient-to-r from-[#a259df] to-[#38b6ff] text-white rounded-xl shadow hover:scale-105 hover:opacity-90 transition"
                                     >
-                                        수정
+                                        bearbeiten
                                     </button>
                                     <button
                                         onClick={() => onDelete(evt)}
                                         className="px-3 py-1 bg-red-500 text-white rounded-xl shadow hover:bg-red-700 transition"
                                     >
-                                        삭제
+                                        löschen
                                     </button>
                                 </div>
                             </li>

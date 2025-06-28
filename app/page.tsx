@@ -4,7 +4,7 @@ export default async function Home() {
     const { data, error } = await supabase.from('appointments').select('*');
 
     return (
-        <main>
+        <main className="container">
             <h1>Termine</h1>
             {error && <div>에러: {error.message}</div>}
             <ul>
@@ -15,6 +15,10 @@ export default async function Home() {
                     </li>
                 ))}
             </ul>
+
+            <h1 className="text-3xl font-bold underline accent-red-200">
+                Hello world!
+            </h1>
         </main>
     );
 }

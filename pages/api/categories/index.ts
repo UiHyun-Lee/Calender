@@ -1,4 +1,3 @@
-// pages/api/categories/index.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import { supabase } from "../../../lib/supabaseClient";
 
