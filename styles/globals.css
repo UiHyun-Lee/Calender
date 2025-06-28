@@ -25,7 +25,8 @@
 }
 
 body {
-  @apply bg-[var(--bg-main)] text-[var(--text-main)] min-h-screen;
+  /*@apply bg-[var(--bg-main)] text-[var(--text-main)] min-h-screen;*/
+  background-color: #162841;
   font-family: 'Inter', 'Pretendard', 'Segoe UI', 'system-ui', sans-serif;
   transition: background 0.25s, color 0.2s;
 }
@@ -159,18 +160,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   box-shadow: 0 4px 24px #12162748 !important;
 }
 
-/*!* 라이트 모드 *!*/
-/*body.light-mode {*/
-/*  !*background-color: var(--bg-light);*!*/
-/*  background-color: white;*/
-/*  color: var(--text-light);*/
-/*}*/
-
-/*!* 다크 모드 *!*/
-/*body.dark-mode {*/
-/*  background-color: var(--bg-dark);*/
-/*  color: var(--text-dark);*/
-/*}*/
 .dark body {
   @apply bg-[var(--bg-main)] text-[var(--text-main)];
 }
@@ -185,4 +174,11 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 .dark .fc .fc-day-today {
   background: #233858 !important;   /* 다크모드용 */
+}
+.fc-day-sun a,     /* 월간 뷰의 날짜(숫자) */
+.fc-day-sun .fc-daygrid-day-number,   /* dayGridMonth 숫자 */
+.fc-day-sun .fc-list-day-cushion      /* 리스트 뷰 날짜 */
+{
+  color: #ff5555 !important;  /* 원하는 빨간색 코드로 */
+  font-weight: 600;
 }
