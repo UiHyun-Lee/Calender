@@ -36,33 +36,64 @@ export default function EditEventModal({
     }, [event]);
 
     if (!open || !event) return null;
-
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-            <div className="bg-[#222b46] p-8 rounded-2xl shadow-2xl min-w-[350px] w-full max-w-md border border-[#263754] flex flex-col gap-4">
+            <div className="
+            min-w-[350px] w-full max-w-md flex flex-col gap-4 border
+            p-8 rounded-2xl shadow-2xl
+            bg-gray-50 text-gray-900 border-gray-300
+            dark:bg-[#222b46] dark:text-gray-100 dark:border-[#263754]
+            transition
+        ">
                 <div className="flex justify-between items-center mb-2">
-                    <span className="text-xl font-bold text-white">Termin bearbeiten</span>
-                    <button onClick={onClose} className="text-gray-400 hover:text-white text-2xl">&times;</button>
+                    <span className="text-xl font-bold">Termin bearbeiten</span>
+                    <button
+                        onClick={onClose}
+                        className="text-gray-400 hover:text-black dark:hover:text-white text-2xl transition"
+                        aria-label="Schließen"
+                    >
+                        &times;
+                    </button>
                 </div>
                 <input
-                    className="w-full p-2 rounded-lg bg-[#111827] border border-[#374151] text-white focus:ring-2 focus:ring-[#38b6ff]/60"
+                    className="
+                    w-full p-2 rounded-lg
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#111827] dark:text-gray-100 dark:border-[#374151]
+                    focus:ring-2 focus:ring-[#38b6ff]/60 transition
+                "
                     value={title}
                     onChange={e => setTitle(e.target.value)}
                 />
                 <input
                     type="datetime-local"
-                    className="w-full p-2 rounded-lg bg-[#111827] border border-[#374151] text-white focus:ring-2 focus:ring-[#38b6ff]/60"
+                    className="
+                    w-full p-2 rounded-lg
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#111827] dark:text-gray-100 dark:border-[#374151]
+                    focus:ring-2 focus:ring-[#38b6ff]/60 transition
+                "
                     value={start?.slice(0, 16)}
                     onChange={e => setStart(e.target.value)}
                 />
                 <input
                     type="datetime-local"
-                    className="w-full p-2 rounded-lg bg-[#111827] border border-[#374151] text-white focus:ring-2 focus:ring-[#38b6ff]/60"
+                    className="
+                    w-full p-2 rounded-lg
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#111827] dark:text-gray-100 dark:border-[#374151]
+                    focus:ring-2 focus:ring-[#38b6ff]/60 transition
+                "
                     value={end?.slice(0, 16)}
                     onChange={e => setEnd(e.target.value)}
                 />
                 <select
-                    className="w-full p-2 rounded-lg bg-[#111827] border border-[#374151] text-white focus:ring-2 focus:ring-[#a259df]/60"
+                    className="
+                    w-full p-2 rounded-lg
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#111827] dark:text-gray-100 dark:border-[#374151]
+                    focus:ring-2 focus:ring-[#a259df]/60 transition
+                "
                     value={category}
                     onChange={e => setCategory(e.target.value)}
                 >
@@ -72,7 +103,12 @@ export default function EditEventModal({
                     ))}
                 </select>
                 <textarea
-                    className="w-full p-2 rounded-lg bg-[#111827] border border-[#374151] text-white focus:ring-2 focus:ring-[#38b6ff]/60"
+                    className="
+                    w-full p-2 rounded-lg
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#111827] dark:text-gray-100 dark:border-[#374151]
+                    focus:ring-2 focus:ring-[#38b6ff]/60 transition
+                "
                     value={notes}
                     onChange={e => setNotes(e.target.value)}
                     rows={3}
@@ -92,7 +128,7 @@ export default function EditEventModal({
                     </button>
                     <button
                         onClick={onClose}
-                        className="px-4 py-2 rounded-xl bg-gray-400 text-white font-bold hover:bg-gray-500 shadow transition"
+                        className="px-4 py-2 rounded-xl bg-gray-300 text-gray-900 font-bold hover:bg-gray-400 dark:bg-gray-400 dark:text-white dark:hover:bg-gray-500 shadow transition"
                     >
                         Abbrechen
                     </button>
@@ -100,4 +136,5 @@ export default function EditEventModal({
             </div>
         </div>
     );
+
 }

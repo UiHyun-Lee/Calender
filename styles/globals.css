@@ -39,15 +39,21 @@ body {
 }
 
 .btn-main {
-  @apply px-5 py-2 rounded-full font-bold transition bg-gradient-to-r;
-  background-image: linear-gradient(90deg, var(--accent), var(--accent2));
-  color: #fff;
-  border: none;
-  box-shadow: 0 1px 8px #0002;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--accent2) !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  padding: 6px 22px !important;
+  margin: 0 4px;
+  outline: none !important;
+  transition: background 0.16s, color 0.13s;
 }
 .btn-main:hover, .btn-main:focus {
-  filter: brightness(1.07);
-  box-shadow: 0 3px 16px var(--accent2)30, 0 1px 8px #0002;
+  background: linear-gradient(90deg, var(--accent), var(--accent2)) !important;
+  color: #fff !important;
 }
 
 .btn-danger {
@@ -95,11 +101,11 @@ input:focus, select:focus, textarea:focus {
 }
 
 .fc .fc-header-toolbar {
-  background: rgba(34, 43, 70, 0.95);
+  background: var(--bg-panel) !important;
   border-radius: 1.2rem;
-  box-shadow: 0 4px 24px #12162748;
   margin-bottom: 1.2rem;
   padding: 1.2rem 2rem 1rem 2rem;
+  color: var(--text-main) !important;
 }
 
 .fc .fc-button {
@@ -137,8 +143,46 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
 
+/* FullCalendar "more" popover 배경/글씨 테마별 설정 */
+.fc .fc-popover {
+  background: #fff !important;        /* 라이트모드 - 흰색 */
+  color: #22223b !important;          /* 라이트모드 - 진회색 텍스트 */
+  border: 1px solid #ececec !important;
+  box-shadow: 0 4px 24px #12162728 !important;
+}
 
+/* 다크모드에서만 */
+.dark .fc .fc-popover {
+  background: #233858 !important;     /* 다크모드 - 네이비 */
+  color: #e6e8ef !important;          /* 다크모드 - 밝은 글씨 */
+  border: 1px solid #263754 !important;
+  box-shadow: 0 4px 24px #12162748 !important;
+}
 
+/*!* 라이트 모드 *!*/
+/*body.light-mode {*/
+/*  !*background-color: var(--bg-light);*!*/
+/*  background-color: white;*/
+/*  color: var(--text-light);*/
+/*}*/
 
+/*!* 다크 모드 *!*/
+/*body.dark-mode {*/
+/*  background-color: var(--bg-dark);*/
+/*  color: var(--text-dark);*/
+/*}*/
+.dark body {
+  @apply bg-[var(--bg-main)] text-[var(--text-main)];
+}
 
-
+.dashboard-sidebar {
+  background: var(--bg);
+  color: var(--text);
+  /* 나머지 스타일링 */
+}
+.fc .fc-day-today {
+  background: #e0f2fe !important;   /* 라이트모드용 */
+}
+.dark .fc .fc-day-today {
+  background: #233858 !important;   /* 다크모드용 */
+}

@@ -27,22 +27,41 @@ export default function EditEventListModal({
                                                onClose,
                                            }: EditEventListModalProps) {
     if (!open) return null;
+    if (!open) return null;
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-            <div className="bg-[#233858] p-8 rounded-2xl shadow-2xl w-[400px] max-h-[90vh] overflow-y-auto border border-[#263754]">
-                <div className="mb-4 text-xl font-bold text-white flex justify-between items-center">
+            <div className="
+            w-[400px] max-h-[90vh] overflow-y-auto p-8 rounded-2xl shadow-2xl border
+            bg-gray-50 text-gray-900 border-gray-300
+            dark:bg-[#233858] dark:text-gray-100 dark:border-[#263754]
+            transition
+        ">
+                <div className="mb-4 text-xl font-bold flex justify-between items-center">
                     <span>Termin bearbeiten</span>
-                    <button onClick={onClose} className="text-gray-400 hover:text-white text-2xl">&times;</button>
+                    <button
+                        onClick={onClose}
+                        className="text-gray-400 hover:text-black dark:hover:text-white text-2xl transition"
+                    >
+                        &times;
+                    </button>
                 </div>
                 {events.length === 0 ? (
-                    <div className="text-gray-300">Keine Termine gefunden.</div>
+                    <div className="text-gray-400 dark:text-gray-300">Keine Termine gefunden.</div>
                 ) : (
                     <ul className="flex flex-col gap-3">
                         {events.map((evt) => (
-                            <li key={evt.id} className="flex flex-col bg-[#2e436e] rounded-lg p-3 shadow-md">
+                            <li
+                                key={evt.id}
+                                className="
+                                flex flex-col rounded-lg p-3 shadow-md
+                                bg-gray-100 text-gray-900
+                                dark:bg-[#2e436e] dark:text-white
+                                transition
+                            "
+                            >
                                 <div className="flex justify-between items-center">
-                                    <span className="font-bold text-white">{evt.title}</span>
-                                    <span className="text-sm text-gray-300">{evt.start?.slice(0, 16)}</span>
+                                    <span className="font-bold">{evt.title}</span>
+                                    <span className="text-sm text-gray-500 dark:text-gray-300">{evt.start?.slice(0, 16)}</span>
                                 </div>
                                 <div className="flex gap-2 mt-2">
                                     <button
@@ -65,4 +84,5 @@ export default function EditEventListModal({
             </div>
         </div>
     );
+
 }

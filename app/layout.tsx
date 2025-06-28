@@ -12,7 +12,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <Toaster position="top-center" theme="dark" richColors />
 
-
         <div className="container mx-auto p-4">
             {children}
         </div>

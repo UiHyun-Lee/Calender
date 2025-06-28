@@ -67,17 +67,27 @@ export default function EventModal({ open, onCloseAction, onAddAction, categorie
             setError("Das Enddatum muss nach dem Startdatum liegen.");
             return;
         }
-        onAddAction({ title, start, end, notes, firstname, lastname, category });
+        onAddAction({title, start, end, notes, firstname, lastname, category});
         onCloseAction();
     };
 
     if (!open) return null;
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/40">
-            <div className="bg-[#222b46] p-6 rounded-lg shadow-xl min-w-[340px] flex flex-col gap-3 border border-[#263754]">
+            <div className="
+            min-w-[340px] flex flex-col gap-3 border
+            p-6 rounded-lg shadow-xl
+            bg-gray-50 text-gray-900 border-gray-300
+            dark:bg-[#222b46] dark:text-gray-100 dark:border-[#263754]
+            transition
+        ">
                 <div className="flex justify-between items-center mb-2">
-                    <h2 className="font-bold text-lg text-white">Neuer Termin</h2>
-                    <button onClick={onCloseAction} className="text-gray-400 text-xl hover:text-white">
+                    <h2 className="font-bold text-lg">Neuer Termin</h2>
+                    <button
+                        onClick={onCloseAction}
+                        className="text-gray-400 text-xl hover:text-black dark:hover:text-white transition"
+                        aria-label="Schließen"
+                    >
                         &times;
                     </button>
                 </div>
@@ -88,43 +98,78 @@ export default function EventModal({ open, onCloseAction, onAddAction, categorie
                     placeholder="Titel"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="rounded px-3 py-2 bg-[#233858] text-white border border-[#263754]"
+                    className="
+                    rounded px-3 py-2
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#233858] dark:text-white dark:border-[#263754]
+                    transition
+                "
                 />
                 <input
                     placeholder="Vorname"
                     value={firstname}
                     onChange={handleFirstnameChange}
-                    className="rounded px-3 py-2 bg-[#233858] text-white border border-[#263754]"
+                    className="
+                    rounded px-3 py-2
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#233858] dark:text-white dark:border-[#263754]
+                    transition
+                "
                 />
                 <input
                     placeholder="Nachname"
                     value={lastname}
                     onChange={handleLastnameChange}
-                    className="rounded px-3 py-2 bg-[#233858] text-white border border-[#263754]"
+                    className="
+                    rounded px-3 py-2
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#233858] dark:text-white dark:border-[#263754]
+                    transition
+                "
                 />
 
                 <input
                     type="datetime-local"
                     value={start}
                     onChange={(e) => setStart(e.target.value)}
-                    className="rounded px-3 py-2 bg-[#233858] text-white border border-[#263754]"
+                    className="
+                    rounded px-3 py-2
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#233858] dark:text-white dark:border-[#263754]
+                    transition
+                "
                 />
                 <input
                     type="datetime-local"
                     value={end}
                     onChange={(e) => setEnd(e.target.value)}
-                    className="rounded px-3 py-2 bg-[#233858] text-white border border-[#263754]"
+                    className="
+                    rounded px-3 py-2
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#233858] dark:text-white dark:border-[#263754]
+                    transition
+                "
                 />
                 <input
                     placeholder="Notizen"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    className="rounded px-3 py-2 bg-[#233858] text-white border border-[#263754]"
+                    className="
+                    rounded px-3 py-2
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#233858] dark:text-white dark:border-[#263754]
+                    transition
+                "
                 />
                 <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="rounded px-3 py-2 bg-[#233858] text-white border border-[#263754]"
+                    className="
+                    rounded px-3 py-2
+                    bg-gray-100 text-gray-900 border border-gray-300
+                    dark:bg-[#233858] dark:text-white dark:border-[#263754]
+                    transition
+                "
                 >
                     <option value="">Kategorie wählen</option>
                     {categories.map((c) => (
@@ -134,7 +179,10 @@ export default function EventModal({ open, onCloseAction, onAddAction, categorie
 
                 <button
                     onClick={handleAdd}
-                    className="bg-gradient-to-r from-[#a259df] to-[#38b6ff] text-white font-bold py-2 rounded-xl hover:opacity-90 transition"
+                    className="
+                    bg-gradient-to-r from-[#a259df] to-[#38b6ff] text-white font-bold py-2
+                    rounded-xl hover:opacity-90 transition
+                "
                 >
                     Hinzufügen
                 </button>
