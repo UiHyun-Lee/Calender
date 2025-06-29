@@ -1,12 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-    getTodayISO,
-    getWeekStartEndISO,
-    getMonthStartEndISO,
-} from "../lib/dateUtils";
+import {getTodayISO, getWeekStartEndISO, getMonthStartEndISO,} from "../lib/dateUtils";
 
+// Filter type definition
 export type Filter = {
     categories: string[];
     start?: string;
@@ -14,6 +11,7 @@ export type Filter = {
     client?: string;
 };
 
+// Category type definition
 export type Category = { id: string; label: string; color: string };
 
 type FilterButtonsProps = {
@@ -23,19 +21,23 @@ type FilterButtonsProps = {
 
 export default function FilterButtons({categories, onFilterChangeAction,}: FilterButtonsProps) {
 
+    // State for selected categories, date range, and client
     const [selCats, setSelCats] = useState<string[]>([]);
     const [range, setRange] = useState<{ start?: string; end?: string }>({});
     const [client, setClient] = useState<string>("");
 
+    // Get ISO strings for today, week, and month
     const todayISO = getTodayISO();
     const { start: weekStartISO, end: weekEndISO } = getWeekStartEndISO();
     const { start: monthStartISO, end: monthEndISO } = getMonthStartEndISO();
 
+    // Toggle category selection
     const toggleCat = (id: string) =>
         setSelCats((prev) =>
             prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
         );
 
+    // Apply filter and notify parent
     const applyFilter = () => {
         onFilterChangeAction({
             categories: selCats,
@@ -45,6 +47,7 @@ export default function FilterButtons({categories, onFilterChangeAction,}: Filte
         });
     };
 
+    // Reset all filters
     const resetFilter = () => {
         setSelCats([]);
         setRange({});
@@ -60,6 +63,7 @@ export default function FilterButtons({categories, onFilterChangeAction,}: Filte
             min-w-[320px] max-w-[90vw]
         ">
 
+            {/* Category filter buttons */}
             <div className="flex flex-wrap gap-2">
                 <button
                     onClick={() => setSelCats([])}
@@ -88,7 +92,7 @@ export default function FilterButtons({categories, onFilterChangeAction,}: Filte
                 ))}
             </div>
 
-            {/* Zeitraum */}
+            {/* Date range filter buttons */}
             <div className="flex gap-2">
                 <button
                     onClick={() => setRange({ start: todayISO, end: todayISO })}
@@ -97,10 +101,10 @@ export default function FilterButtons({categories, onFilterChangeAction,}: Filte
                         ${range.start === todayISO && range.end === todayISO
                         ? "bg-white text-black dark:bg-gray-700 dark:text-white"
                         : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white"}
-                    `}
-                >
+                    `}>
                     Heute
                 </button>
+
                 <button
                     onClick={() => setRange({ start: weekStartISO, end: weekEndISO })}
                     className={`
@@ -108,35 +112,32 @@ export default function FilterButtons({categories, onFilterChangeAction,}: Filte
                         ${range.start === weekStartISO && range.end === weekEndISO
                         ? "bg-white text-black dark:bg-gray-700 dark:text-white"
                         : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white"}
-                    `}
-                >
+                    `}>
                     Diese Woche
                 </button>
+
                 <button
                     onClick={() => setRange({ start: monthStartISO, end: monthEndISO })}
                     className={`
                         px-3 py-1 rounded-md transition
                         ${range.start === monthStartISO && range.end === monthEndISO
                         ? "bg-white text-black dark:bg-gray-700 dark:text-white"
-                        : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white"}
-                    `}
-                >
+                        : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white"}`}>
                     Diesen Monat
                 </button>
+
                 <button
                     onClick={() => setRange({})}
                     className={`
                         px-3 py-1 rounded-md transition
                         ${!range.start && !range.end
                         ? "bg-white text-black dark:bg-gray-700 dark:text-white"
-                        : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white"}
-                    `}
-                >
+                        : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white"}`}>
                     Alles
                 </button>
             </div>
 
-            {/* Klient:in */}
+            {/* Client filter input */}
             <div className="flex gap-2">
                 <input
                     type="text"
@@ -148,12 +149,10 @@ export default function FilterButtons({categories, onFilterChangeAction,}: Filte
                         bg-gray-100 text-gray-900
                         dark:bg-[#162841] dark:text-gray-100
                         px-3 py-1 rounded border border-gray-300 dark:border-[#263754]
-                        transition
-                    "
-                />
+                        transition"/>
             </div>
 
-            {/* Aktion 버튼 */}
+            {/* Action buttons: reset and apply */}
             <div className="flex justify-end gap-2 mt-2">
                 <button
                     onClick={resetFilter}
@@ -161,19 +160,16 @@ export default function FilterButtons({categories, onFilterChangeAction,}: Filte
                         px-4 py-1
                         bg-gray-300 text-gray-900
                         dark:bg-gray-600 dark:text-white
-                        rounded-md transition
-                    "
-                >
+                        rounded-md transition">
                     Zurücksetzen
                 </button>
+
                 <button
                     onClick={applyFilter}
                     className="
                         px-4 py-1
                         bg-gradient-to-r from-[#a259df] to-[#38b6ff] text-white
-                        rounded-md transition
-                    "
-                >
+                        rounded-md transition">
                     Filtern
                 </button>
             </div>

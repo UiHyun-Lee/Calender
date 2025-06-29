@@ -3,28 +3,32 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import FullCalendar from "@fullcalendar/react";
 import type FullCalendarClass from "@fullcalendar/react";
+import dynamic from "next/dynamic";
+import DashboardSidebar from "./DashboardSidebar";
+import FilterDropdown from "./FilterDropdown";
+import { getWeekStartEndISO, getMonthStartEndISO } from "../lib/dateUtils";
+import EditEventModal from "./EditEventModal";
+import EditEventListModal from "./EditEventListModal";
+import { Plus, SquarePen } from "lucide-react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-import dynamic from "next/dynamic";
 import { supabase } from "../lib/supabaseClient";
-import DashboardSidebar from "./DashboardSidebar";
-import FilterDropdown from "./FilterDropdown";
 import type { Filter, Category } from "./FilterButtons";
-import { getWeekStartEndISO, getMonthStartEndISO } from "../lib/dateUtils";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
-import EditEventModal from "./EditEventModal";
-import EditEventListModal from "./EditEventListModal";
 import { toast } from "sonner";
-import { Plus, SquarePen } from "lucide-react";
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import deLocale from '@fullcalendar/core/locales/de';
+
 const EventModal = dynamic(() => import("./EventModal"), { ssr: false });
 
 export default function CalendarWithDB() {
+    // Reference to the FullCalendar instance
     const calendarRef = useRef<FullCalendarClass | null>(null);
+
+    // State for categories, filters, modals, events, theme, and patients
     const [categories, setCategories] = useState<Category[]>([]);
     const [filter, setFilter] = useState<Filter>({ categories: [] });
     const [modalOpen, setModalOpen] = useState(false);
@@ -38,18 +42,20 @@ export default function CalendarWithDB() {
     const { start: monthStartISO, end: monthEndISO } = getMonthStartEndISO();
     const [patients, setPatients] = useState<{ id: string; firstname: string; lastname: string }[]>([]);
 
-
+    // Update current time every minute
     useEffect(() => {
         const timer = setInterval(() => setNow(new Date()), 60 * 1000);
         return () => clearInterval(timer);
     }, []);
-    // 환자 목록 패칭
+
+    // Fetch patient list from API
     useEffect(() => {
         fetch("/api/patients")
             .then(res => res.json())
             .then(data => setPatients(data));
     }, []);
 
+    // Update body class for theme switching
     useEffect(() => {
         document.body.classList.remove("light-mode", "dark-mode");
         document.body.classList.remove("dark", "light");
@@ -62,7 +68,7 @@ export default function CalendarWithDB() {
         }
     }, [calTheme]);
 
-    // 카테고리 로드
+    // Fetch categories from Supabase
     useEffect(() => {
         supabase
             .from("categories")
@@ -74,7 +80,12 @@ export default function CalendarWithDB() {
             });
     }, []);
 
-    // ⚡ 이벤트 fetch 함수
+    // Fetch events when edit list modal is open
+    useEffect(() => {
+        if (editListOpen) fetchEvents();
+    }, [editListOpen]);
+
+    // Fetch all events from Supabase
     const fetchEvents = async () => {
         const { data, error } = await supabase
             .from("appointments")
@@ -83,18 +94,14 @@ export default function CalendarWithDB() {
         if (!error) setEventList(data || []);
     };
 
-    // 이벤트 편집 모달 열릴 때 새로고침
-    useEffect(() => {
-        if (editListOpen) fetchEvents();
-    }, [editListOpen]);
-
+    // Handle edit button click for an event
     const handleEditClick = (evt: any) => {
         setSelectedEvent(evt);
         setEditModalOpen(true);
     };
 
+    // Build unique client list from events
     const clientList = useMemo(() => {
-        // 일정이 있는 환자만 추출, 중복 제거
         const seen = new Set<string>();
         return eventList
             .map(e => e.patient)
@@ -104,6 +111,7 @@ export default function CalendarWithDB() {
             );
     }, [eventList]);
 
+    // Handle event deletion
     const handleDeleteClick = async (evt: any) => {
         if (!confirm("Möchten Sie das wirklich löschen?")) return;
         try {
@@ -117,6 +125,7 @@ export default function CalendarWithDB() {
         }
     };
 
+    // Handle event update
     const handleUpdateEvent = async (data: any) => {
         try {
             if (!selectedEvent) return;
@@ -135,7 +144,7 @@ export default function CalendarWithDB() {
         }
     };
 
-    // 필터 변경시 새로고침(FullCalendar refetchEvents도 호출)
+    // Handle filter changes and update calendar view
     const handleFilterChangeAction = useCallback(
         (f: Filter) => {
             setFilter(f);
@@ -155,13 +164,15 @@ export default function CalendarWithDB() {
         [weekStartISO, weekEndISO, monthStartISO, monthEndISO]
     );
 
-    // 테마 토글 함수
+    // Toggle calendar theme
     const handleThemeToggle = () => {
         setCalTheme((ct) => (ct === "light" ? "dark" : "light"));
     };
 
     return (
         <div className="flex h-screen">
+
+            {/* Sidebar with dashboard information */}
             <aside className="w-64 h-full bg-panel">
                 <DashboardSidebar
                     events={eventList}
@@ -174,15 +185,18 @@ export default function CalendarWithDB() {
             <div className="flex-1 overflow-auto">
                 <div className={`min-h-screen pb-8 ${calTheme === "dark"
                     ? "bg-[#162841] text-white"
-                    : "bg-white text-black"} rounded-2xl shadow-xl`}
-                >
+                    : "bg-white text-black"} rounded-2xl shadow-xl`}>
+
+                    {/* Top bar with filter and action buttons */}
                     <div className="flex justify-end items-center gap-4 px-8 py-6">
+
                         <FilterDropdown
                             categories={categories}
                             filter={filter}
                             onFilterChange={handleFilterChangeAction}
                             clientList={clientList}
                         />
+
                         <button className="btn-main group flex items-center justify-center relative min-w-[44px]"
                                 onClick={() => setModalOpen(true)}>
                             <span className="block group-hover:hidden transition-all">
@@ -191,6 +205,7 @@ export default function CalendarWithDB() {
                              Neuer Termin
                             </span>
                         </button>
+
                         <button className="btn-main group flex items-center justify-center relative min-w-[44px]"
                                 onClick={() => setEditListOpen(true)}>
                             <span className="block group-hover:hidden transition-all">
@@ -199,8 +214,10 @@ export default function CalendarWithDB() {
                              Termin bearbeiten
                             </span>
                         </button>
+
                     </div>
 
+                    {/* Modal for editing event list */}
                     <EditEventListModal
                         open={editListOpen}
                         events={eventList}
@@ -212,6 +229,8 @@ export default function CalendarWithDB() {
                         onDelete={handleDeleteClick}
                         onClose={() => setEditListOpen(false)}
                     />
+
+                    {/* Modal for editing a single event */}
                     <EditEventModal
                         open={editModalOpen}
                         event={selectedEvent}
@@ -223,6 +242,8 @@ export default function CalendarWithDB() {
                         }}
                         onClose={() => setEditModalOpen(false)}
                     />
+
+                    {/* Modal for adding a new event */}
                     <EventModal
                         open={modalOpen}
                         onCloseAction={() => setModalOpen(false)}
@@ -245,11 +266,13 @@ export default function CalendarWithDB() {
                         categories={categories}
                     />
 
+                    {/* Main calendar card */}
                     <div className="card mx-4 md:mx-20 my-6 overflow-hidden">
+
                         <FullCalendar
                             ref={calendarRef}
                             themeSystem="Litera"
-                            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin,googleCalendarPlugin]}
+                            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, googleCalendarPlugin]}
                             googleCalendarApiKey={process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY}
                             initialView="dayGridMonth"
                             dayMaxEvents={2}
@@ -278,7 +301,6 @@ export default function CalendarWithDB() {
                                         ...(filter.client ? { client: filter.client } : {})
                                     },
                                 },
-                                // Google Holiday Calendar (독일)
                                 {
                                     googleCalendarId: "de.german#holiday@group.v.calendar.google.com",
                                     color: "#f87171",
@@ -286,41 +308,37 @@ export default function CalendarWithDB() {
                                     className: "gcal-holiday",
                                 },
                             ]}
+                            // Show tooltip on event hover
                             eventMouseEnter={(info) => {
                                 const { notes, patient } = info.event.extendedProps as any;
                                 const firstname = patient?.firstname || "";
                                 const lastname = patient?.lastname || "";
-                                const fmt = (d: any) =>
-                                    d instanceof Date
-                                        ? d.toLocaleTimeString("de-DE", {
-                                            hour: "2-digit",
-                                            minute: "2-digit",
-                                        })
-                                        : "";
+                                const fmt = (d: any) => d instanceof Date ? d.toLocaleTimeString("de-DE", {
+                                    hour: "2-digit", minute: "2-digit",
+                                }) : "";
                                 const startStr = fmt(info.event.start);
                                 const endStr = fmt(info.event.end);
+
                                 info.el.removeAttribute("title");
-                                info.el
-                                    .querySelectorAll<HTMLElement>("[title]")
-                                    .forEach((el) => el.removeAttribute("title"));
+                                info.el.querySelectorAll<HTMLElement>("[title]").forEach((el) => el.removeAttribute("title"));
+
                                 if (!(info.el as any)._tippy) {
                                     const instance = tippy(info.el, {
                                         allowHTML: true,
                                         interactive: true,
                                         placement: "top",
                                         delay: [100, 50],
-                                        content: `
-                      <div style="font-size:14px;line-height:1.4">
-                        <strong>${firstname} ${lastname}</strong><br/>
-                        <em>${startStr}${endStr ? " – " + endStr : ""}</em><br/>
-                        ${notes || ""}
-                      </div>`
+                                        content: `<div style="font-size:14px;line-height:1.4">
+                                            <strong>${firstname} ${lastname}</strong><br/>
+                                            <em>${startStr}${endStr ? " – " + endStr : ""}</em><br/>
+                                            ${notes || ""} </div>`
                                     });
                                     instance.show();
                                 } else {
                                     (info.el as any)._tippy.show();
                                 }
                             }}
+                            // Hide tooltip on mouse leave
                             eventMouseLeave={(info) => {
                                 (info.el as any)._tippy.hide();
                             }}
@@ -334,4 +352,3 @@ export default function CalendarWithDB() {
         </div>
     );
 }
-

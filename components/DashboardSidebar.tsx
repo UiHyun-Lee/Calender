@@ -1,9 +1,10 @@
 "use client";
 
-import React, {useMemo} from "react";
-import type {Appointment} from "../types";
-import {CalendarDays, Sun, Moon, ScrollText, RotateCcw} from "lucide-react";
+import React, { useMemo } from "react";
+import type { Appointment } from "../types";
+import { CalendarDays, Sun, Moon, ScrollText, RotateCcw } from "lucide-react";
 
+// Props for the DashboardSidebar component
 export type DashboardSidebarProps = {
     events: Appointment[];
     onToggleCalendarTheme: () => void;
@@ -11,10 +12,13 @@ export type DashboardSidebarProps = {
     theme: "light" | "dark";
 };
 
-export default function DashboardSidebar({events, onToggleCalendarTheme, onRefresh, theme,}: DashboardSidebarProps) {
+export default function DashboardSidebar({ events, onToggleCalendarTheme, onRefresh, theme }: DashboardSidebarProps) {
     const now = new Date();
+
+    // Count of active (future) events
     const activeCount = events.filter(e => new Date(e.start) > now).length;
 
+    // Find the next upcoming event
     const nextEvent = useMemo(() => {
         return (
             events
@@ -26,13 +30,13 @@ export default function DashboardSidebar({events, onToggleCalendarTheme, onRefre
         );
     }, [events, now]);
 
+    // Count of future events with notes
     const notesCount = useMemo(() => {
-
         const futureEvents = events.filter(e => new Date(e.start) > now);
-
         return futureEvents.filter(e => e.notes && e.notes.trim() !== "").length;
     }, [events, now]);
 
+    // Find the next event with notes
     const nextNotesEvent = useMemo(() => {
         return (
             events
@@ -45,12 +49,10 @@ export default function DashboardSidebar({events, onToggleCalendarTheme, onRefre
         );
     }, [events, now]);
 
-
-
     return (
         <div className="dashboard-sidebar space-y-6 p-4 h-full">
 
-            {/* Theme toggle & Refresh buttons */}
+            {/* Theme toggle & Refresh button */}
             <div className="flex justify-between items-center">
                 <button
                     aria-label="Toggle theme"
@@ -58,33 +60,33 @@ export default function DashboardSidebar({events, onToggleCalendarTheme, onRefre
                     className="p-2 rounded-full bg-gray-200 dark:bg-gray-600 hover:opacity-80 transition-all"
                 >
                     {theme === "dark" ? (
-                        <Sun size={20} className="text-yellow-400"/>
+                        <Sun size={20} className="text-yellow-400" />
                     ) : (
-                        <Moon size={20} className="text-blue-800"/>
+                        <Moon size={20} className="text-blue-800" />
                     )}
                 </button>
                 {onRefresh && (
                     <button
-                        aria-label="새로고침"
+                        aria-label="Reload"
                         onClick={onRefresh}
                         className="p-2 rounded-full bg-gray-200 dark:bg-gray-600 hover:opacity-80 transition-all ml-2"
-                        title="새로고침"
+                        title="Reload"
                     >
-                        <RotateCcw size={20}/>
+                        <RotateCcw size={20} />
                     </button>
                 )}
             </div>
 
             {/* Header */}
             <div className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                <CalendarDays size={20}/>
+                <CalendarDays size={20} />
                 <h2 className="text-xl font-bold">Information</h2>
             </div>
 
             <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg space-y-4">
-                {/* Active Events */}
+                {/* Active events */}
                 <div className="flex items-center justify-between text-gray-900 dark:text-gray-100">
-                    <CalendarDays size={24}/>
+                    <CalendarDays size={24} />
                     <div className="text-right">
                         <div className="text-2xl font-semibold">
                             {activeCount}
@@ -95,7 +97,7 @@ export default function DashboardSidebar({events, onToggleCalendarTheme, onRefre
                     </div>
                 </div>
 
-                {/* Next Event */}
+                {/* Next event */}
                 <div className="pt-4 border-t border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
                     <div className="text-sm text-gray-500 dark:text-gray-400">
                         Nächster Termin:
@@ -118,16 +120,16 @@ export default function DashboardSidebar({events, onToggleCalendarTheme, onRefre
                         </>
                     ) : (
                         <div className="text-sm italic text-gray-500 dark:text-gray-400">
-                            Keine bevorstehenden Termine
+                            Keine anstehenden Termine
                         </div>
                     )}
                 </div>
             </div>
 
             <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg space-y-4">
-                {/* Important */}
+                {/* Important notes */}
                 <div className="flex items-center justify-between text-gray-900 dark:text-gray-100">
-                    <ScrollText size={24}/>
+                    <ScrollText size={24} />
                     <div className="text-right">
                         <div className="text-2xl font-semibold">
                             {notesCount}
@@ -138,10 +140,10 @@ export default function DashboardSidebar({events, onToggleCalendarTheme, onRefre
                     </div>
                 </div>
 
-                {/* Next Notes */}
+                {/* Next note */}
                 <div className="pt-4 border-t border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
                     <div className="text-sm text-gray-500 dark:text-gray-400">
-                        Nächste Notizen:
+                        Nächster Notizen:
                     </div>
                     {nextNotesEvent ? (
                         <>
@@ -161,7 +163,7 @@ export default function DashboardSidebar({events, onToggleCalendarTheme, onRefre
                         </>
                     ) : (
                         <div className="text-sm italic text-gray-500 dark:text-gray-400">
-                            Keine bevorstehenden Notizen
+                            Keine anstehenden Notizen
                         </div>
                     )}
                 </div>
