@@ -30,25 +30,74 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // DELETE: Termin löschen
+    // if (req.method === "DELETE") {
+    //     // 1. 해당 appointment를 참조하는 activity가 있는지 확인
+    //     const { count, error: checkError } = await supabase
+    //         .from("activities")
+    //         .select("*", { count: "exact", head: true })
+    //         .eq("appointment", id);
+    //
+    //     if (checkError) return res.status(500).json({ error: checkError.message });
+    //     if ((count ?? 0) > 0) {
+    //         // 연관된 activity가 있음!
+    //         return res.status(400).json({ error: "Termin kann nicht gelöscht werden, weil Aktivitäten existieren." });
+    //     }
+    //
+    //     // 2. 아무 활동도 없으면 정상적으로 삭제
+    //     const { error } = await supabase
+    //         .from("appointments")
+    //         .delete()
+    //         .eq("id", id);
+    //     if (error) return res.status(500).json({ error: error.message });
+    //     return res.status(204).end();
+    // }
+
     if (req.method === "DELETE") {
-        // 1. 해당 appointment를 참조하는 activity가 있는지 확인
-        const { count, error: checkError } = await supabase
+        // 1. 먼저 해당 appointment에 연결된 모든 activities 삭제
+        const { error: activityDeleteError } = await supabase
             .from("activities")
-            .select("*", { count: "exact", head: true })
+            .delete()
             .eq("appointment", id);
 
-        if (checkError) return res.status(500).json({ error: checkError.message });
-        if ((count ?? 0) > 0) {
-            // 연관된 activity가 있음!
-            return res.status(400).json({ error: "Termin kann nicht gelöscht werden, weil Aktivitäten existieren." });
+        if (activityDeleteError) {
+            return res.status(500).json({ error: "Aktivitäten konnten nicht gelöscht werden: " + activityDeleteError.message });
         }
 
-        // 2. 아무 활동도 없으면 정상적으로 삭제
+        const { error: categoriesDeleteError } = await supabase
+            .from("categories")
+            .delete()
+            .eq("id", id);
+
+        if (categoriesDeleteError) {
+            return res.status(500).json({ error: "Kategorien konnten nicht gelöscht werden: " + categoriesDeleteError.message });
+        }
+
+        const { error: patientsDeleteError } = await supabase
+            .from("patients")
+            .delete()
+            .eq("id", id);
+
+        if (patientsDeleteError) {
+            return res.status(500).json({ error: "Patienten konnten nicht gelöscht werden: " + patientsDeleteError.message });
+        }
+
+        const { error: appointmentAssigneeDeleteError } = await supabase
+            .from("appointment_assignee")
+            .delete()
+            .eq("appointment", id);
+
+        if (appointmentAssigneeDeleteError) {
+            return res.status(500).json({ error: "Aktivitäten konnten nicht gelöscht werden: " + appointmentAssigneeDeleteError.message });
+        }
+
         const { error } = await supabase
             .from("appointments")
             .delete()
             .eq("id", id);
-        if (error) return res.status(500).json({ error: error.message });
+
+        if (error) {
+            return res.status(500).json({ error: "Termin konnte nicht gelöscht werden: " + error.message });
+        }
         return res.status(204).end();
     }
 
