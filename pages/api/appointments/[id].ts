@@ -31,6 +31,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // DELETE: Termin löschen
     if (req.method === "DELETE") {
+        // 1. 해당 appointment를 참조하는 activity가 있는지 확인
+        const { count, error: checkError } = await supabase
+            .from("activities")
+            .select("*", { count: "exact", head: true })
+            .eq("appointment", id);
+
+        if (checkError) return res.status(500).json({ error: checkError.message });
+        if ((count ?? 0) > 0) {
+            // 연관된 activity가 있음!
+            return res.status(400).json({ error: "Termin kann nicht gelöscht werden, weil Aktivitäten existieren." });
+        }
+
+        // 2. 아무 활동도 없으면 정상적으로 삭제
         const { error } = await supabase
             .from("appointments")
             .delete()

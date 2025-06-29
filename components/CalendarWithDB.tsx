@@ -111,16 +111,21 @@ export default function CalendarWithDB() {
             );
     }, [eventList]);
 
-    // Handle event deletion
+    // Handle delete button click for an event
     const handleDeleteClick = async (evt: any) => {
         if (!confirm("Möchten Sie das wirklich löschen?")) return;
         try {
             const res = await fetch(`/api/appointments/${evt.id}`, { method: "DELETE" });
-            if (!res.ok) throw new Error();
+            if (!res.ok) {
+                // 에러 메시지 읽기
+                const errMsg = (await res.json()).error || "Löschen fehlgeschlagen!";
+                toast.error(errMsg);
+                return;
+            }
             calendarRef.current?.getApi().refetchEvents();
             await fetchEvents();
             toast.success("Termin wurde gelöscht!");
-        } catch {
+        } catch (e) {
             toast.error("Löschen fehlgeschlagen!");
         }
     };
