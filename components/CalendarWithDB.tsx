@@ -261,7 +261,7 @@ export default function CalendarWithDB() {
                                 });
                                 if (!res.ok) throw new Error();
                                 calendarRef.current?.getApi().refetchEvents();
-                                await fetchEvents();
+                                // await fetchEvents();
                                 setModalOpen(false);
                                 toast.success("Termin wurde erstellt!");
                             } catch {

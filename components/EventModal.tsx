@@ -49,12 +49,20 @@ export default function EventModal({ open, onCloseAction, onAddAction, categorie
         if (/^[A-Za-z]*$/.test(val)) {
             setFirstname(val);
         }
+        else {
+            setError("Der Name darf nur mit einem Buchstaben des Alphabets beginnen.");
+            return;
+        }
     };
     // Only allow letters for lastname
     const handleLastnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         if (/^[A-Za-z]*$/.test(val)) {
             setLastname(val);
+        }
+        else {
+            setError("Der Name darf nur mit einem Buchstaben des Alphabets beginnen.");
+            return;
         }
     };
 
@@ -158,9 +166,7 @@ export default function EventModal({ open, onCloseAction, onAddAction, categorie
                 {/* Add button */}
                 <button
                     onClick={handleAdd}
-                    className="
-                    bg-gradient-to-r from-[#a259df] to-[#38b6ff] text-white font-bold py-2
-                    rounded-xl hover:opacity-90 transition">
+                    className="px-3 py-1 bg-gradient-to-r from-[#a259df] to-[#38b6ff] text-white rounded-xl shadow hover:scale-105 hover:opacity-90 transition">
                     Hinzufügen
                 </button>
             </div>

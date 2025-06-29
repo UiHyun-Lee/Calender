@@ -25,9 +25,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Apply filters if provided
         if (category) query = query.eq("category", category as string);
-        if (start) query = query.gte("start", start as string);
-        if (end) query = query.lte("end", end as string);
         if (client) query = query.eq("patient", client as string);
+        if (start && end) {
+            query = query
+                .gt("end", start as string)
+                .lt("start", end as string);
+        } else {
+            if (start) query = query.gte("start", start as string);
+            if (end) query = query.lte("end", end as string);
+        }
 
         // Execute the query
         const { data, error } = await query;

@@ -177,16 +177,13 @@ export default function FilterDropdown({ categories, filter, onFilterChange, cli
                     <div className="flex justify-end gap-2 mt-2">
                         <button
                             onClick={resetFilter}
-                            className="px-4 py-1 bg-gray-300 text-gray-900 dark:bg-gray-600 dark:text-white rounded-md transition">
+                            className="px-4 py-1 bg-gray-300 text-gray-900 dark:bg-gray-600 dark:text-white rounded-md hover:scale-105 hover:opacity-90 transition">
                             Zurücksetzen
                         </button>
 
                         <button
                             onClick={applyFilter}
-                            className="
-                                px-4 py-1
-                                bg-gradient-to-r from-[#a259df] to-[#38b6ff] text-white
-                                rounded-md transition">
+                            className="px-3 py-1 bg-gradient-to-r from-[#a259df] to-[#38b6ff] text-white rounded-xl shadow hover:scale-105 hover:opacity-90 transition">
                             Anwenden
                         </button>
                     </div>

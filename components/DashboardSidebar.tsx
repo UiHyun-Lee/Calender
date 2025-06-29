@@ -15,39 +15,54 @@ export type DashboardSidebarProps = {
 export default function DashboardSidebar({ events, onToggleCalendarTheme, onRefresh, theme }: DashboardSidebarProps) {
     const now = new Date();
 
-    // Count of active (future) events
-    const activeCount = events.filter(e => new Date(e.start) > now).length;
+// 1. Count of active (future or ongoing) events
+    const activeCount = events.filter(e => {
+        const start = new Date(e.start);
+        const end = e.end ? new Date(e.end) : null;
+        if (end) return end >= now;
+        return start >= now;
+    }).length;
 
-    // Find the next upcoming event
+// 2. Next upcoming (future or ongoing) event
     const nextEvent = useMemo(() => {
+        const filtered = events.filter(e => {
+            const start = new Date(e.start);
+            const end = e.end ? new Date(e.end) : null;
+            if (end) return end >= now;
+            return start >= now;
+        });
         return (
-            events
-                .filter((e) => new Date(e.start) > now)
-                .sort(
-                    (a, b) =>
-                        new Date(a.start).getTime() - new Date(b.start).getTime()
-                )[0] || null
+            filtered.sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())[0] || null
         );
     }, [events, now]);
 
-    // Count of future events with notes
+// 3. Count of active events with notes
     const notesCount = useMemo(() => {
-        const futureEvents = events.filter(e => new Date(e.start) > now);
-        return futureEvents.filter(e => e.notes && e.notes.trim() !== "").length;
+        return events.filter(e => {
+            const start = new Date(e.start);
+            const end = e.end ? new Date(e.end) : null;
+            const hasNotes = typeof e.notes === "string" && e.notes.trim() !== "";
+            if (!hasNotes) return false;
+            if (end) return end >= now;
+            return start >= now;
+        }).length;
     }, [events, now]);
 
-    // Find the next event with notes
+// 4. Next upcoming active event with notes
     const nextNotesEvent = useMemo(() => {
+        const filtered = events.filter(e => {
+            const start = new Date(e.start);
+            const end = e.end ? new Date(e.end) : null;
+            const hasNotes = typeof e.notes === "string" && e.notes.trim() !== "";
+            if (!hasNotes) return false;
+            if (end) return end >= now;
+            return start >= now;
+        });
         return (
-            events
-                .filter(e => new Date(e.start) > now && typeof e.notes === "string" && e.notes.trim() !== "")
-                .sort((a, b) => {
-                    const aTime = a.start ? new Date(a.start).getTime() : 0;
-                    const bTime = b.start ? new Date(b.start).getTime() : 0;
-                    return aTime - bTime;
-                })[0] || null
+            filtered.sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())[0] || null
         );
     }, [events, now]);
+
 
     return (
         <div className="dashboard-sidebar space-y-6 p-4 h-full">
