@@ -1,4 +1,4 @@
-# 🩺 Vocare Fullstack Challenge – Calendar App (Next.js, Supabase, FullCalendar)
+# Vocare Fullstack Challenge – Calendar App (Next.js, Supabase, FullCalendar)
 
 This project is a modern calendar & appointment management web app built for the **Vocare Fullstack Tech Challenge**.
 
@@ -93,6 +93,7 @@ https://calender-phi-one.vercel.app/
 **Dark Mode**
 
 <img width="1791" alt="Bildschirmfoto 2025-06-29 um 02 48 59" src="https://github.com/user-attachments/assets/ed058845-240c-4c33-9d43-3baac0906a61" />
+
 
 **Light Mode**
 
