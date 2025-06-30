@@ -48,6 +48,11 @@ export default function CalendarWithDB() {
         return () => clearInterval(timer);
     }, []);
 
+    // fetch eventList
+    useEffect(() => {
+        fetchEvents();
+    }, []);
+
     // Fetch patient list from API
     useEffect(() => {
         fetch("/api/patients")
@@ -55,18 +60,6 @@ export default function CalendarWithDB() {
             .then(data => setPatients(data));
     }, []);
 
-    // Update body class for theme switching
-    useEffect(() => {
-        document.body.classList.remove("light-mode", "dark-mode");
-        document.body.classList.remove("dark", "light");
-        if (calTheme === "dark") {
-            document.body.classList.add("dark-mode");
-            document.body.classList.add("dark");
-        } else {
-            document.body.classList.add("light-mode");
-            document.body.classList.add("light");
-        }
-    }, [calTheme]);
 
     // Fetch categories from Supabase
     useEffect(() => {
@@ -84,6 +77,19 @@ export default function CalendarWithDB() {
     useEffect(() => {
         if (editListOpen) fetchEvents();
     }, [editListOpen]);
+
+    // Update body class for theme switching
+    useEffect(() => {
+        document.body.classList.remove("light-mode", "dark-mode");
+        document.body.classList.remove("dark", "light");
+        if (calTheme === "dark") {
+            document.body.classList.add("dark-mode");
+            document.body.classList.add("dark");
+        } else {
+            document.body.classList.add("light-mode");
+            document.body.classList.add("light");
+        }
+    }, [calTheme]);
 
     // Fetch all events from Supabase
     const fetchEvents = async () => {
