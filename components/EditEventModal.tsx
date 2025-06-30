@@ -20,6 +20,8 @@ export default function EditEventModal({open, event, categories, onUpdate, onDel
     const [end, setEnd] = useState("");
     const [category, setCategory] = useState("");
     const [notes, setNotes] = useState("");
+    const [patientFirstname, setPatientFirstname] = useState("");
+    const [patientLastname, setPatientLastname] = useState("");
 
     // Update form fields when event changes
     useEffect(() => {
@@ -29,6 +31,21 @@ export default function EditEventModal({open, event, categories, onUpdate, onDel
             setEnd(event.end || event.endStr || "");
             setCategory(event.category || event.extendedProps?.category || "");
             setNotes(event.notes || event.extendedProps?.notes || "");
+
+            if (event.patient) {
+                if (typeof event.patient === "object") {
+                    setPatientFirstname(event.patient.firstname || "");
+                    setPatientLastname(event.patient.lastname || "");
+                } else if (typeof event.patient === "string") {
+                    // 문자열이면 성/이름 자동 분리 시도
+                    const [first, ...last] = event.patient.split(" ");
+                    setPatientFirstname(first || "");
+                    setPatientLastname(last.join(" ") || "");
+                }
+            } else {
+                setPatientFirstname("");
+                setPatientLastname("");
+            }
         }
     }, [event]);
 
@@ -74,6 +91,20 @@ export default function EditEventModal({open, event, categories, onUpdate, onDel
                     value={end?.slice(0, 16)}
                     onChange={e => setEnd(e.target.value)}
                 />
+                <div className="flex gap-2">
+                    <input
+                        className="input-modal flex-1"
+                        value={patientFirstname}
+                        onChange={e => setPatientFirstname(e.target.value)}
+                        placeholder="Vorname"
+                    />
+                    <input
+                        className="input-modal flex-1"
+                        value={patientLastname}
+                        onChange={e => setPatientLastname(e.target.value)}
+                        placeholder="Nachname"
+                    />
+                </div>
                 {/* Category select */}
                 <select
                     className="input-modal"
