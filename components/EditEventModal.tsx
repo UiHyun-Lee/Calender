@@ -32,12 +32,12 @@ export default function EditEventModal({open, event, categories, onUpdate, onDel
             setCategory(event.category || event.extendedProps?.category || "");
             setNotes(event.notes || event.extendedProps?.notes || "");
 
+            // Set patient name fields if available
             if (event.patient) {
                 if (typeof event.patient === "object") {
                     setPatientFirstname(event.patient.firstname || "");
                     setPatientLastname(event.patient.lastname || "");
                 } else if (typeof event.patient === "string") {
-                    // 문자열이면 성/이름 자동 분리 시도
                     const [first, ...last] = event.patient.split(" ");
                     setPatientFirstname(first || "");
                     setPatientLastname(last.join(" ") || "");
@@ -91,6 +91,7 @@ export default function EditEventModal({open, event, categories, onUpdate, onDel
                     value={end?.slice(0, 16)}
                     onChange={e => setEnd(e.target.value)}
                 />
+                {/* Patient name inputs */}
                 <div className="flex gap-2">
                     <input
                         className="input-modal flex-1"
@@ -126,7 +127,8 @@ export default function EditEventModal({open, event, categories, onUpdate, onDel
                 {/* Action buttons */}
                 <div className="flex gap-2 mt-2">
                     <button
-                        onClick={() => onUpdate({ title, start, end, category, notes })}
+                        onClick={() => onUpdate({ title, start, end, category, notes, firstname: patientFirstname,
+                            lastname: patientLastname })}
                         className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#a259df] to-[#38b6ff] text-white font-bold shadow hover:scale-105 hover:opacity-90 transition">
                         Speichern
                     </button>
