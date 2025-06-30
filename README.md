@@ -92,10 +92,12 @@ https://calender-phi-one.vercel.app/
 
 **Dark Mode**
 
-![Bildschirmfoto 2025-06-29 um 02.48.59.png](../../Desktop/Bildschirmfoto%202025-06-29%20um%2002.48.59.png)
+<img width="1791" alt="Bildschirmfoto 2025-06-29 um 02 48 59" src="https://github.com/user-attachments/assets/ed058845-240c-4c33-9d43-3baac0906a61" />
+
 **Light Mode**
 
-![Bildschirmfoto 2025-06-29 um 02.49.08.png](../../Desktop/Bildschirmfoto%202025-06-29%20um%2002.49.08.png)
+<img width="1792" alt="Bildschirmfoto 2025-06-29 um 02 49 08" src="https://github.com/user-attachments/assets/a2985a3e-0432-4c77-9139-42856d0bd43e" />
+
 
 ## 📄 Challenge Requirements
 
