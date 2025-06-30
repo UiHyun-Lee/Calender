@@ -1,37 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🩺 Vocare Fullstack Challenge – Calendar App (Next.js, Supabase, FullCalendar)
 
-## Getting Started
+This project is a modern calendar & appointment management web app built for the **Vocare Fullstack Tech Challenge**.
 
-First, run the development server:
+- **Book, edit, and delete appointments**
+- **Filter by category, period, or client**
+- **Google Calendar integration for German public holidays (red-highlighted)**
+- **Dark/Light mode switch**
+- **Live dashboard with instant counts for appointments and notes**
+- **Responsive, beautiful UI with TailwindCSS**
+- **Deployed & ready for Vercel**
+
+<br/>
+
+## ✨ Features
+
+- **FullCalendar Integration:**  
+  View appointments in month, week, day, and list views
+
+- **Google Calendar (DE Holidays):**  
+  See official German holidays in your calendar (highlighted in red)
+
+- **Smart Filtering:**  
+  Filter by category, date range (today/week/month), and client
+
+- **Patient Management:**  
+  Patients auto-created on appointment add
+
+- **Notes Support:**  
+  Add and view notes per appointment
+
+- **Theme Switcher:**  
+  Toggle between light and dark mode
+
+- **Instant Edit/Delete:**  
+  Edit or delete events with instant feedback
+
+- **Localization:**  
+  German interface 🇩🇪
+
+- **Dashboard Sidebar:**  
+  Always see current number of active appointments and notes (live updates)
+
+<br/>
+
+## 🛠️ Tech Stack
+
+- **Frontend:**  
+  Next.js, React, TailwindCSS, FullCalendar
+
+- **Backend/API:**  
+  Next.js API routes, Supabase (Postgres)
+
+- **Calendar API:**  
+  Google Calendar Holidays API
+
+- **UI/UX:**  
+  tippy.js (tooltips), sonner (toasts)
+
+<br/>
+
+## 🚀 Getting Started
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/deinusername/vocare-fullstack-challenge.git
+cd vocare-fullstack-challenge
+npm install
+```
+
+### 2. Create .env.local
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY=your_google_calendar_api_key
+```
+
+### 3. Run locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+Visit http://localhost:3000
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## 🏁 Demo
+https://calender-phi-one.vercel.app/
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Screenshots
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Dark Mode**
 
-## Learn More
+![Bildschirmfoto 2025-06-29 um 02.48.59.png](../../Desktop/Bildschirmfoto%202025-06-29%20um%2002.48.59.png)
+**Light Mode**
 
-To learn more about Next.js, take a look at the following resources:
+![Bildschirmfoto 2025-06-29 um 02.49.08.png](../../Desktop/Bildschirmfoto%202025-06-29%20um%2002.49.08.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📄 Challenge Requirements
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [x] **Month, week, day, and list calendar views**
+- [x] **CRUD appointments**
+- [x] **Filter/sort by category, period, and client**
+- [x] **Tooltip details on hover**
+- [x] **No changes to the database schema or foreign keys**
+- [x] **Uses FullCalendar + Supabase**
+- [x] **Dark/Light mode**
+- [x] **Vercel ready**
