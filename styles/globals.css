@@ -181,6 +181,17 @@ textarea:focus {
     font-weight: 600;
 }
 
+.fc-event-time {
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+}
+
+.fc-event-title {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+}
 /* FullCalendar popover */
 .fc .fc-popover {
     background: #fff !important;
