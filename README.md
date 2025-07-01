@@ -7,12 +7,12 @@ This project is a modern calendar & appointment management web app built for the
 - **Google Calendar integration for German public holidays (red-highlighted)**
 - **Dark/Light mode switch**
 - **Live dashboard with instant counts for appointments and notes**
-- **Responsive, beautiful UI with TailwindCSS**
+- **Responsive UI with TailwindCSS**
 - **Deployed & ready for Vercel**
 
 <br/>
 
-## ✨ Features
+##  Features
 
 - **FullCalendar Integration:**  
   View appointments in month, week, day, and list views
@@ -36,7 +36,7 @@ This project is a modern calendar & appointment management web app built for the
   Edit or delete events with instant feedback
 
 - **Localization:**  
-  German interface 🇩🇪
+  German interface 
 
 - **Dashboard Sidebar:**  
   Always see current number of active appointments and notes (live updates)
@@ -59,13 +59,13 @@ This project is a modern calendar & appointment management web app built for the
 
 <br/>
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/deinusername/vocare-fullstack-challenge.git
-cd vocare-fullstack-challenge
+git clone https://github.com/UiHyun-Lee/Calender.git
+cd calender
 npm install
 ```
 
@@ -85,7 +85,7 @@ npm run dev
 Visit http://localhost:3000
 
 
-## 🏁 Demo
+##  Demo
 https://calender-phi-one.vercel.app/
 
 ## Screenshots
@@ -100,7 +100,7 @@ https://calender-phi-one.vercel.app/
 <img width="1792" alt="Bildschirmfoto 2025-06-29 um 02 49 08" src="https://github.com/user-attachments/assets/a2985a3e-0432-4c77-9139-42856d0bd43e" />
 
 
-## 📄 Challenge Requirements
+## Challenge Requirements
 
 - [x] **Month, week, day, and list calendar views**
 - [x] **CRUD appointments**
